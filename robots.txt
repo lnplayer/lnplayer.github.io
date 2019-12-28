@@ -1,0 +1,15 @@
+# robots.txt
+User-agent: *
+Allow: /
+Allow: /archives/ 
+Allow: /home/
+Allow: /tags/
+
+Disallow: /js/
+Disallow: /css/
+Disallow: /fonts/
+Disallow: /vendors/
+Disallow: /fancybox/
+
+Sitemap: http://www.darylliu.cn/sitemap.xml
+Sitemap: http://www.darylliu.cn/baidusitemap.xml
