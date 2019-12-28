@@ -1,0 +1,1088 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+<meta name="google-site-verification" content="VjbNjTpWpGeKE6EKjlutGyQiKadR_XlMTxCtrmFRQaA">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="01A0ZqIsqw">
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="adsense,hexo,next,个人博客,广告">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/uploads/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="个人博客搭了大概也有大半年的时间，陆陆续续更新了一些文章，虽然每天整个网站的浏览量不是特别高，但是也希望能够引入网站的流量变现（蚊子腿再小也是肉啊...），于是自己查阅了相关的资料，整理了一份完整的，接入谷歌广告联盟google adsense的一套完整流程，供大家参考～。">
+<meta name="keywords" content="adsense,hexo,next,个人博客,广告">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hexo个人next主题博客接入谷歌广告">
+<meta property="og:url" content="http://www.darylliu.cn/archives/6a1f6623.html">
+<meta property="og:site_name" content="Daryl&#39;s Blog">
+<meta property="og:description" content="个人博客搭了大概也有大半年的时间，陆陆续续更新了一些文章，虽然每天整个网站的浏览量不是特别高，但是也希望能够引入网站的流量变现（蚊子腿再小也是肉啊...），于是自己查阅了相关的资料，整理了一份完整的，接入谷歌广告联盟google adsense的一套完整流程，供大家参考～。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-06-25T15:11:57.972Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hexo个人next主题博客接入谷歌广告">
+<meta name="twitter:description" content="个人博客搭了大概也有大半年的时间，陆陆续续更新了一些文章，虽然每天整个网站的浏览量不是特别高，但是也希望能够引入网站的流量变现（蚊子腿再小也是肉啊...），于是自己查阅了相关的资料，整理了一份完整的，接入谷歌广告联盟google adsense的一套完整流程，供大家参考～。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1219606132354870",
+    enable_page_level_ads: true
+  });
+</script>
+
+<meta name="baidu_union_verify" content="8bbdd584c3355c9ecaeb5001f4060c0d">
+
+
+
+  <link rel="canonical" href="http://www.darylliu.cn/archives/6a1f6623.html">
+
+
+
+
+
+  <title> hexo个人next主题博客接入谷歌广告 | Daryl's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9c78f23ae1aea6b3342689a7e2f9dced";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Daryl's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">学习笔记</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.darylliu.cn/archives/6a1f6623.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Daryl">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Daryl's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                hexo个人next主题博客接入谷歌广告
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-12T10:43:23+08:00">
+                2019-04-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/杂谈/" itemprop="url" rel="index">
+                    <span itemprop="name">杂谈</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/archives/6a1f6623.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="archives/6a1f6623.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/archives/6a1f6623.html" class="leancloud_visitors" data-flag-title="hexo个人next主题博客接入谷歌广告">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  2.3k字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  9分钟
+                </span>
+              
+            </div>
+          
+
+          
+              <div class="post-description">
+                  个人博客搭了大概也有大半年的时间，陆陆续续更新了一些文章，虽然每天整个网站的浏览量不是特别高，但是也希望能够引入网站的流量变现（蚊子腿再小也是肉啊...），于是自己查阅了相关的资料，整理了一份完整的，接入谷歌广告联盟google adsense的一套完整流程，供大家参考～。
+              </div>
+          
+
+        </div>
+      </header>
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-1219606132354870" data-ad-slot="3126295718"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>个人博客搭了大概也有大半年的时间，陆陆续续更新了一些文章，虽然每天整个网站的浏览量不是特别高，但是也希望能够引入网站的流量变现（蚊子腿再小也是肉啊…），于是自己查阅了相关的资料，整理了一份完整的，接入谷歌广告联盟google adsense的一套完整流程，供大家参考～</p>
+<a id="more"></a>
+<h2 id="准备环境"><a href="#准备环境" class="headerlink" title="准备环境"></a>准备环境</h2><ul>
+<li>使用hexo的next主题搭建博客</li>
+<li>已翻墙，可以登录google adsense网站(本人是在<a href="https://banwagong.cn/" target="_blank" rel="noopener">搬瓦工</a>上购买了一年的服务器，自己搭了了一套ShadowSocks环境)</li>
+</ul>
+<h2 id="注册账号"><a href="#注册账号" class="headerlink" title="注册账号"></a>注册账号</h2><p>注册账号流程比较简单，入口在这里：<a href="https://www.google.com/adsense/" target="_blank" rel="noopener">Google Adsense</a></p>
+<h2 id="添加广告代码"><a href="#添加广告代码" class="headerlink" title="添加广告代码"></a>添加广告代码</h2><p>注册账号完成之后，需要将谷歌提供给你的一份代码添加到你网站的中的    &lt;head&gt;标记中，在你添加完成之后，点击确认，谷歌会到你的网站上进行核查和验收。</p>
+<p>对于使用hexo的next主题博客的同学，只要将谷歌提供的代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;script async src=&quot;http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">(adsbygoogle = window.adsbygoogle || []).push(&#123;</span><br><span class="line">google_ad_client: &quot;ca-pub-123456789&quot;,</span><br><span class="line">enable_page_level_ads: true</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p>放到<em>\themes\next\layout_partials\head.swig </em> 任意一个位置(本人放在了最后)即可，在给谷歌确认之前，可以自己先使用浏览器进行验证：<br>打开自己的网站，点击右键，查看源码，搜索一下是否已经成功添加上述代码。<br>确认无误之后，在google adsense上点击确认，开始验证，一般没问题的话几分钟就会出结果，有问题的话要等待一段时间。</p>
+<p>根据我个人申请的流程，总结了一些经验，供大家参考：</p>
+<ol>
+<li>网站文章不要太少，至少大于10篇博客以上。</li>
+<li>网站上架半年以上，如果是新申请的网站，一般不容易过审。(这里建议大家有接入google adsense的新站长，等网站稍微成熟点再去申请，本人第一次申请就因为建站时间过短，还不到3个月被拒)</li>
+</ol>
+<h2 id="个性化配置广告位"><a href="#个性化配置广告位" class="headerlink" title="个性化配置广告位"></a>个性化配置广告位</h2><p>待通过审核之后，就可以开始考虑在自己的网站上进行广告位置的筛选和设计了，目前google adsense主要提供了自动广告和广告单元两种形式的广告添加方式。</p>
+<h3 id="自动广告"><a href="#自动广告" class="headerlink" title="自动广告"></a>自动广告</h3><p>自动广告是google adsense近来提供的一种广告形式，它能够通过分析你的博客布局结构，自定义的在你的网站中插入合适的广告，无论是内容，还是广告尺寸，都是完全契合网站内容本身的，算是一种比较高质量的广告。</p>
+<p>但是根据我的使用经验，这种广告投放的几率比较小，往往好几篇文章或页面才会投放一个广告内容，效率比较低(唯一的好处是，如果你的网站支持移动端查看的话，会自动投放移动端自适应的广告)</p>
+<p>具体的代码插入方法，其实就是上述的用来检验的代码，一旦上述代码审核通过，其实已经自动接入了google adsense的自动广告。</p>
+<h3 id="广告单元"><a href="#广告单元" class="headerlink" title="广告单元"></a>广告单元</h3><p>为了能够最高效的利用自己博客的广告位，adsense还提供了三种固定广告位</p>
+<ol>
+<li>文字广告和展示广告(即侧边栏，评论区之类的固定广告位)</li>
+<li>信息流广告(插入在信息流内容的广告位置)</li>
+<li>文章内嵌广告(主要是插入在每篇文章内部的开始，中间，结尾部分，展示次数比较多，强烈推荐)</li>
+</ol>
+<p>由于本人的是博客网站，所以第二种信息流广告没有投入使用，这里主要使用了第一种和第三种。</p>
+<p>具体的操作流程是，在网站上，选择广告单元-&gt;新建广告位-&gt;选择对应的广告类型-&gt;生成对应的广告代码。</p>
+<p>这里，本人根据个人经验，提供几种针对hexo的next主题广告代码位置的插入。</p>
+<ul>
+<li>插入评论区：将代码插入<em>\themes\next\layout_partials\comments.swig </em>中的末尾即可。 </li>
+<li>插入侧边栏：将代码插入<em>\themes\next\layout_macro\sidebar.swig </em>文件中&lt;div class=”sidebar-inner”&gt; &lt;/div&gt;的最下侧即可</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;sidebar-inner&quot;&gt;</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">      &#123;% if theme.sidebar.b2t %&#125;</span><br><span class="line">        &lt;div class=&quot;back-to-top&quot;&gt;</span><br><span class="line">          &lt;i class=&quot;fa fa-arrow-up&quot;&gt;&lt;/i&gt;</span><br><span class="line">          &#123;% if theme.sidebar.scrollpercent %&#125;</span><br><span class="line">            &lt;span id=&quot;scrollpercent&quot;&gt;&lt;span&gt;0&lt;/span&gt;%&lt;/span&gt;</span><br><span class="line">          &#123;% endif %&#125;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &#123;% endif %&#125;</span><br><span class="line">      &lt;script async src=&quot;//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">      &lt;!-- 侧边栏广告 --&gt;</span><br><span class="line">      &lt;ins class=&quot;adsbygoogle&quot;</span><br><span class="line">           style=&quot;display:block&quot;</span><br><span class="line">           data-ad-client=&quot;ca-pub-1219606132354870&quot;</span><br><span class="line">           data-ad-slot=&quot;1362622054&quot;</span><br><span class="line">           data-ad-format=&quot;auto&quot;</span><br><span class="line">           data-full-width-responsive=&quot;true&quot;&gt;&lt;/ins&gt;</span><br><span class="line">      &lt;script&gt;</span><br><span class="line">      (adsbygoogle = window.adsbygoogle || []).push(&#123;&#125;);</span><br><span class="line">      &lt;/script&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>插入文章头部：在<em>\themes\next\layout_custom\post.swig </em> 目录下，新建google_adsense.swig，并将google提供的广告代码放入其中，然后将</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% include &apos;../_custom/google_adsense.swig&apos; %&#125;</span><br></pre></td></tr></table></figure>
+<p>插入<em>\themes\next\layout_macro\post.swig </em>文件中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;post-body&#123;% if theme.han %&#125; han-init-context&#123;% endif %&#125;&quot; itemprop=&quot;articleBody&quot;&gt;</span><br><span class="line">      &#123;# Gallery support #&#125;</span><br><span class="line">      &#123;% if post.photos and post.photos.length %&#125;</span><br><span class="line">        &lt;div class=&quot;post-gallery&quot; itemscope itemtype=&quot;http://schema.org/ImageGallery&quot;&gt;</span><br><span class="line">          &#123;% set COLUMN_NUMBER = 3 %&#125;</span><br><span class="line">          &#123;% for photo in post.photos %&#125;</span><br><span class="line">            &#123;% if loop.index0 % COLUMN_NUMBER === 0 %&#125;&lt;div class=&quot;post-gallery-row&quot;&gt;&#123;% endif %&#125;</span><br><span class="line">              &lt;a class=&quot;post-gallery-img fancybox&quot;</span><br><span class="line">                 href=&quot;&#123;&#123; url_for(photo) &#125;&#125;&quot; rel=&quot;gallery_&#123;&#123; post._id &#125;&#125;&quot;</span><br><span class="line">                 itemscope itemtype=&quot;http://schema.org/ImageObject&quot; itemprop=&quot;url&quot;&gt;</span><br><span class="line">                &lt;img src=&quot;&#123;&#123; url_for(photo) &#125;&#125;&quot; itemprop=&quot;contentUrl&quot;/&gt;</span><br><span class="line">              &lt;/a&gt;</span><br><span class="line">            &#123;% if loop.index0 % COLUMN_NUMBER === 2 %&#125;&lt;/div&gt;&#123;% endif %&#125;</span><br><span class="line">          &#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">          &#123;# Append end tag for `post-gallery-row` when (photos size mod COLUMN_NUMBER) is less than COLUMN_NUMBER #&#125;</span><br><span class="line">          &#123;% if post.photos.length % COLUMN_NUMBER &gt; 0 %&#125;&lt;/div&gt;&#123;% endif %&#125;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &#123;% endif %&#125;</span><br><span class="line"></span><br><span class="line">      &#123;% if is_index %&#125;</span><br><span class="line">        &#123;% if post.description and theme.excerpt_description %&#125;</span><br><span class="line">          &#123;&#123; post.description &#125;&#125;</span><br><span class="line">          &lt;!--noindex--&gt;</span><br><span class="line">          &lt;div class=&quot;post-button text-center&quot;&gt;</span><br><span class="line">            &lt;a class=&quot;btn&quot; href=&quot;&#123;&#123; url_for(post.path) &#125;&#125;&quot;&gt;</span><br><span class="line">              &#123;&#123; __(&apos;post.read_more&apos;) &#125;&#125; &amp;raquo;</span><br><span class="line">            &lt;/a&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">          &lt;!--/noindex--&gt;</span><br><span class="line">        &#123;% elif post.excerpt  %&#125;</span><br><span class="line">          &#123;&#123; post.excerpt &#125;&#125;</span><br><span class="line">          &lt;!--noindex--&gt;</span><br><span class="line">          &lt;div class=&quot;post-button text-center&quot;&gt;</span><br><span class="line">            &lt;a class=&quot;btn&quot; href=&quot;&#123;&#123; url_for(post.path) &#125;&#125;&#123;% if theme.scroll_to_more %&#125;#&#123;&#123; __(&apos;post.more&apos;) &#125;&#125;&#123;% endif %&#125;&quot; rel=&quot;contents&quot;&gt;</span><br><span class="line">              &#123;&#123; __(&apos;post.read_more&apos;) &#125;&#125; &amp;raquo;</span><br><span class="line">            &lt;/a&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">          &lt;!--/noindex--&gt;</span><br><span class="line">        &#123;% elif theme.auto_excerpt.enable %&#125;</span><br><span class="line">          &#123;% set content = post.content | striptags %&#125;</span><br><span class="line">          &#123;&#123; content.substring(0, theme.auto_excerpt.length) &#125;&#125;</span><br><span class="line">          &#123;% if content.length &gt; theme.auto_excerpt.length %&#125;...&#123;% endif %&#125;</span><br><span class="line">          &lt;!--noindex--&gt;</span><br><span class="line">          &lt;div class=&quot;post-button text-center&quot;&gt;</span><br><span class="line">            &lt;a class=&quot;btn&quot; href=&quot;&#123;&#123; url_for(post.path) &#125;&#125;&#123;% if theme.scroll_to_more %&#125;#&#123;&#123; __(&apos;post.more&apos;) &#125;&#125;&#123;% endif %&#125;&quot; rel=&quot;contents&quot;&gt;</span><br><span class="line">              &#123;&#123; __(&apos;post.read_more&apos;) &#125;&#125; &amp;raquo;</span><br><span class="line">            &lt;/a&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">          &lt;!--/noindex--&gt;</span><br><span class="line">        &#123;% else %&#125;</span><br><span class="line">          &#123;% if post.type === &apos;picture&apos; %&#125;</span><br><span class="line">            &lt;a href=&quot;&#123;&#123; url_for(post.path) &#125;&#125;&quot;&gt;&#123;&#123; post.content &#125;&#125;&lt;/a&gt;</span><br><span class="line">          &#123;% else %&#125;</span><br><span class="line">            &#123;&#123; post.content &#125;&#125;</span><br><span class="line">          &#123;% endif %&#125;</span><br><span class="line">        &#123;% endif %&#125;</span><br><span class="line">      &#123;% else %&#125;</span><br><span class="line">        &#123;% include &apos;../_custom/google_adsense.swig&apos; %&#125;</span><br><span class="line">        &#123;&#123; post.content &#125;&#125;</span><br><span class="line">      &#123;% endif  %&#125;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p>注意，这里不要搞错，误插入到<em>\themes\next\layout\post.swig </em>文件中了，这样不仅仅会导致每篇文章里存在广告，在首页的列表中，每篇文章同样也都会带上广告，导致首页一次刷出来N个广告，影响网站布局和设计。</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>在成功接入AdSense广告之后，并不算结束，Google会根据几种方式和数据判断广告点击是否作弊，从而注销你的账号。所以不要心存侥幸心理，好好发原创文章，提高网站的质量才是王道。</p>
+<ol>
+<li>作弊广告点击者的IP地址与你Adsense账户登录IP地址相同</li>
+<li>作弊广告点击的CTR数据太高</li>
+<li>作弊广告点击者的IP地址来自同一个地理区域</li>
+<li>根据Cookies判断作弊Adsense广告点击</li>
+<li>作弊广告点击者页面停留时间太短</li>
+<li>直接访问者的广告点击率过高</li>
+<li>流量小但广告点击率高</li>
+<li>在网页上用文字提示请求鼓动点击广告</li>
+</ol>
+<h2 id="说在最后"><a href="#说在最后" class="headerlink" title="说在最后"></a>说在最后</h2><p>现在通过adsense本身能赚到的收入本身并不高，尤其是博客类的网站更是如此，但是既然大家愿意花时间和精力去搭建个人博客，除了钱以外，肯定还有其他的目的，希望大家不要舍本逐末，忘记了自己搭建博客的初衷，毕竟广告收入这个事情，有当然好，没有也不用气馁，尽力就好～</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/uploads/wechat-qcode.png" alt="Daryl WeChat Pay">
+          <p>微信打赏</p>
+        </div>
+      
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hexo/" rel="tag"># hexo</a>
+          
+            <a href="/tags/next/" rel="tag"># next</a>
+          
+            <a href="/tags/adsense/" rel="tag"># adsense</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/archives/aefafc8e.html" rel="next" title="从同步阻塞聊到Java三种IO方式">
+                <i class="fa fa-chevron-left"></i> 从同步阻塞聊到Java三种IO方式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/archives/a4ffb3c8.html" rel="prev" title="编程视频资源教程汇总">
+                编程视频资源教程汇总 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 评论区广告 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1219606132354870" data-ad-slot="4156785282" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="Daryl">
+          <p class="site-author-name" itemprop="name">Daryl</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/darylliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://jacksmiththu.github.io" title="JackSmith" target="_blank">JackSmith</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备环境"><span class="nav-number">2.</span> <span class="nav-text">准备环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注册账号"><span class="nav-number">3.</span> <span class="nav-text">注册账号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加广告代码"><span class="nav-number">4.</span> <span class="nav-text">添加广告代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#个性化配置广告位"><span class="nav-number">5.</span> <span class="nav-text">个性化配置广告位</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自动广告"><span class="nav-number">5.1.</span> <span class="nav-text">自动广告</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#广告单元"><span class="nav-number">5.2.</span> <span class="nav-text">广告单元</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意事项"><span class="nav-number">6.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#说在最后"><span class="nav-number">7.</span> <span class="nav-text">说在最后</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <!-- 侧边栏广告 -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1219606132354870" data-ad-slot="1362622054" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Daryl</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+<div class="BbeiAn-info"">
+  京ICP备 -
+  <a href="http://www.beian.miit.gov.cn">19031408号-1</a>
+  
+</div>
+
+
+        <!-- 
+ -->
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://lnplayer.disqus.com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.darylliu.cn/archives/6a1f6623.html';
+          this.page.identifier = 'archives/6a1f6623.html';
+          this.page.title = 'hexo个人next主题博客接入谷歌广告';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://lnplayer.disqus.com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("qex6MVWdS81UYVJj5P5s3acC-gzGzoHsz", "AqlXEbwQfiMSKTV7jsX1HIyQ");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

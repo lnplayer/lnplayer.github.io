@@ -1,0 +1,1063 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+<meta name="google-site-verification" content="VjbNjTpWpGeKE6EKjlutGyQiKadR_XlMTxCtrmFRQaA">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="01A0ZqIsqw">
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="数据库,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/uploads/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="初识：数据库事务隔离级别学习数据库的时候常常会接触到事务, ACID等概念，那么到底什么是数据库的事务，数据库事务又具有哪些特点，和ACID有怎样的关系，事务的隔离级别又是做什么的呢？ 注：本文参考自&amp;lt;&amp;lt;从Paxos到ZooKeeper-分布式一致性原理和实践&amp;gt;&amp;gt;一书">
+<meta name="keywords" content="数据库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初识：数据库事务隔离级别">
+<meta property="og:url" content="http://www.darylliu.cn/archives/228096a5.html">
+<meta property="og:site_name" content="Daryl&#39;s Blog">
+<meta property="og:description" content="初识：数据库事务隔离级别学习数据库的时候常常会接触到事务, ACID等概念，那么到底什么是数据库的事务，数据库事务又具有哪些特点，和ACID有怎样的关系，事务的隔离级别又是做什么的呢？ 注：本文参考自&amp;lt;&amp;lt;从Paxos到ZooKeeper-分布式一致性原理和实践&amp;gt;&amp;gt;一书">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.darylliu.cn/img/初识：数据库事务隔离级别/img1.jpg">
+<meta property="og:image" content="http://www.darylliu.cn/img/初识：数据库事务隔离级别/img2.jpg">
+<meta property="og:updated_time" content="2019-06-25T15:11:57.972Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="初识：数据库事务隔离级别">
+<meta name="twitter:description" content="初识：数据库事务隔离级别学习数据库的时候常常会接触到事务, ACID等概念，那么到底什么是数据库的事务，数据库事务又具有哪些特点，和ACID有怎样的关系，事务的隔离级别又是做什么的呢？ 注：本文参考自&amp;lt;&amp;lt;从Paxos到ZooKeeper-分布式一致性原理和实践&amp;gt;&amp;gt;一书">
+<meta name="twitter:image" content="http://www.darylliu.cn/img/初识：数据库事务隔离级别/img1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1219606132354870",
+    enable_page_level_ads: true
+  });
+</script>
+
+<meta name="baidu_union_verify" content="8bbdd584c3355c9ecaeb5001f4060c0d">
+
+
+
+  <link rel="canonical" href="http://www.darylliu.cn/archives/228096a5.html">
+
+
+
+
+
+  <title> 初识：数据库事务隔离级别 | Daryl's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9c78f23ae1aea6b3342689a7e2f9dced";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Daryl's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">学习笔记</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.darylliu.cn/archives/228096a5.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Daryl">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Daryl's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                初识：数据库事务隔离级别
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-22T10:23:29+08:00">
+                2018-03-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/archives/228096a5.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="archives/228096a5.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/archives/228096a5.html" class="leancloud_visitors" data-flag-title="初识：数据库事务隔离级别">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1.4k字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  4分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-1219606132354870" data-ad-slot="3126295718"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <h1 id="初识：数据库事务隔离级别"><a href="#初识：数据库事务隔离级别" class="headerlink" title="初识：数据库事务隔离级别"></a>初识：数据库事务隔离级别</h1><p>学习数据库的时候常常会接触到事务, ACID等概念，那么到底什么是数据库的事务，数据库事务又具有哪些特点，和ACID有怎样的关系，事务的隔离级别又是做什么的呢？</p>
+<p><em>注：本文参考自&lt;&lt;从Paxos到ZooKeeper-分布式一致性原理和实践&gt;&gt;一书</em></p>
+<a id="more"></a>
+<h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><p>事务是由一系列对系统中数据进行访问与更新的操作所组成的一个程序执行逻辑单元，狭义上的事务特指数据库事务。</p>
+<p><em>举个例子来说，张三给李四转了1000元钱，那么在数据库操作时，就要先把张三的账户减去1000元，再把李四的账户加上1000元，两部分操作放在一起，才是一个完整的转账过程，也可称之为事务。</em></p>
+<h2 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h2><p>事务具有一定的特点，也就是我们常常所说的ACID。<br>事务的四个特性</p>
+<ol>
+<li><p><strong>原子性(Atomicity)</strong>。事务包含的一系列操作要么全部成功，要么全部失败。一旦有一个操作失败，则将已经执行过的操作进行回滚撤销。<br><em>上述例子中，张三账户减去1000元，李四账户增加1000元两部分操作必须同时成功或失败，不能够出现张三减去了1000，但是李四并没有增加1000的情况。</em></p>
+</li>
+<li><p><strong>一致性(Consistency)</strong>。这里的一致性指的是事务执行前后，数据库都处于一致性状态。<br><em>上述的例子中，无论怎么增加和减少，张三和李四两个人账户里的钱，加起来总数是不会发生改变的。</em></p>
+</li>
+<li><p><strong>持久性(Durability)</strong>。一个事务一旦成功提交，那么它对数据库做出的改变是永久的。</p>
+</li>
+<li><strong>隔离性(Isolation)</strong>。指并发环境中，事务之间是相互隔离，不可打扰的。</li>
+</ol>
+<p>原子性和一致性，上述都已经进行了解释。持久性，顾名思义，对数据库的改变是永久的。<br>最后一个隔离性比较复杂，因为对事务之间进行隔离，隔离到什么程度比较合适呢？完全隔离的话，影响执行性能，完全不隔离的话，容易造成数据的不一致。<br>要解决这些问题，我们先来了解几个基本概念 ：<strong>脏读，不可重复读，幻读</strong></p>
+<h3 id="脏读：一个事务读取了另一个事务还未提交的数据。"><a href="#脏读：一个事务读取了另一个事务还未提交的数据。" class="headerlink" title="脏读：一个事务读取了另一个事务还未提交的数据。"></a>脏读：一个事务读取了另一个事务还未提交的数据。</h3><p>事务A和事务B同时执行，事务A在整个执行阶段，将某个数据项的值由1加到10，然后进行事务提交。在此过程中。事务B进行一次读取，可能看到(1，2，3，4，5，6，7，8，9，10)中的任意值。</p>
+<h3 id="不可重复读：指在一个事务内读取表中的某一行数据，多次读取结果不同。"><a href="#不可重复读：指在一个事务内读取表中的某一行数据，多次读取结果不同。" class="headerlink" title="不可重复读：指在一个事务内读取表中的某一行数据，多次读取结果不同。"></a>不可重复读：指在一个事务内读取表中的某一行数据，多次读取结果不同。</h3><p>如果不考虑脏读的情况，假设事务A，事务B，事务C同时执行，事务A在整个执行阶段，将某个数据项的值由1加到10，然后进行事务提交。在此过程中，事务B进行读取，只可能读取到1和最终值10。之后事务B并没有结束，事务C再次将该项的值由10加到20，然后进行事务提交。在此过程中，事务B再次进行读取，只可能读取到10和最终值20。因此事务B在执行过程中有可能两次读取结果不同。</p>
+<h3 id="幻读：指在一个事务内读取到了别的事务插入的数据，导致前后读取不一致。"><a href="#幻读：指在一个事务内读取到了别的事务插入的数据，导致前后读取不一致。" class="headerlink" title="幻读：指在一个事务内读取到了别的事务插入的数据，导致前后读取不一致。"></a>幻读：指在一个事务内读取到了别的事务插入的数据，导致前后读取不一致。</h3><p>如果不考虑脏读和不可重复读的情况，假设事务A对一个表中的某个数据项设置为1，这种修改涉及到表中的全部数据行，与此同时，事务B向表中插入一条新的数据且该数据项为2，那么此时操作事务A的用户就会发现表中有一条数据的该数据项居然不是1，好像发生了幻觉。</p>
+<p>在上述的例子上，不可重复读和幻读的区别就在于：<br>＋ 不可重复读：在同一事务中，两次读取同一数据，得到内容不同<br>＋ 幻读：同一事务中，用同样的操作读取两次，得到的记录数不相同</p>
+<p>为了解决以上这些问题，保证事务与事务之间的隔离性，数据库中对事务的隔离级别做出了限制，分别在一定程度上对以上问题进行了解决。</p>
+<h2 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h2><p>在标准SQL规范中，定义了四个事务隔离级别。</p>
+<ol>
+<li>读未提交。最低级别，以上问题均无法解决。</li>
+<li>读已提交。可避免脏读情况发生。</li>
+<li>可重复读取。可避免脏读、不可重复读情况的发生。<strong>保证在事务的处理过程中，多次读取同一个数据的时候，其值都和事务开始的时候是一致的</strong>。这也是为何下图中只能读取到1的原因。</li>
+<li>串行化。最严格的事务隔离级别，要求所有事务被串行执行，不能并发执行，可避免脏读、不可重复读、幻读情况的发生。</li>
+</ol>
+<p>下图中是一个很好的例子，分别解释了四种事务隔离级别下，事务B能够读取到的结果。</p>
+<p><img src="/img/初识：数据库事务隔离级别/img1.jpg" alt></p>
+<p><strong>总的来说，事务隔离级别越高，越能保证数据的完整性和一致性，但是付出的代价却是并发的性能。</strong></p>
+<p><img src="/img/初识：数据库事务隔离级别/img2.jpg" alt></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/uploads/wechat-qcode.png" alt="Daryl WeChat Pay">
+          <p>微信打赏</p>
+        </div>
+      
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/archives/b6552223.html" rel="next" title="快速记忆：List及其小伙伴们">
+                <i class="fa fa-chevron-left"></i> 快速记忆：List及其小伙伴们
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/archives/aefafc8e.html" rel="prev" title="从同步阻塞聊到Java三种IO方式">
+                从同步阻塞聊到Java三种IO方式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 评论区广告 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1219606132354870" data-ad-slot="4156785282" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="Daryl">
+          <p class="site-author-name" itemprop="name">Daryl</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/darylliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://jacksmiththu.github.io" title="JackSmith" target="_blank">JackSmith</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#初识：数据库事务隔离级别"><span class="nav-number">1.</span> <span class="nav-text">初识：数据库事务隔离级别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#事务"><span class="nav-number">1.1.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ACID"><span class="nav-number">1.2.</span> <span class="nav-text">ACID</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#脏读：一个事务读取了另一个事务还未提交的数据。"><span class="nav-number">1.2.1.</span> <span class="nav-text">脏读：一个事务读取了另一个事务还未提交的数据。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不可重复读：指在一个事务内读取表中的某一行数据，多次读取结果不同。"><span class="nav-number">1.2.2.</span> <span class="nav-text">不可重复读：指在一个事务内读取表中的某一行数据，多次读取结果不同。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#幻读：指在一个事务内读取到了别的事务插入的数据，导致前后读取不一致。"><span class="nav-number">1.2.3.</span> <span class="nav-text">幻读：指在一个事务内读取到了别的事务插入的数据，导致前后读取不一致。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务隔离级别"><span class="nav-number">1.3.</span> <span class="nav-text">事务隔离级别</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <!-- 侧边栏广告 -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1219606132354870" data-ad-slot="1362622054" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Daryl</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+<div class="BbeiAn-info"">
+  京ICP备 -
+  <a href="http://www.beian.miit.gov.cn">19031408号-1</a>
+  
+</div>
+
+
+        <!-- 
+ -->
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://lnplayer.disqus.com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.darylliu.cn/archives/228096a5.html';
+          this.page.identifier = 'archives/228096a5.html';
+          this.page.title = '初识：数据库事务隔离级别';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://lnplayer.disqus.com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("qex6MVWdS81UYVJj5P5s3acC-gzGzoHsz", "AqlXEbwQfiMSKTV7jsX1HIyQ");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

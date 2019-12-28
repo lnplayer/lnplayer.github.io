@@ -1,0 +1,1109 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+<meta name="google-site-verification" content="VjbNjTpWpGeKE6EKjlutGyQiKadR_XlMTxCtrmFRQaA">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="01A0ZqIsqw">
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="hexo,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/uploads/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="hexo搭建个人博客前言最近突然心血来潮想要搭建自己的博客，就去调研了几种方案：  租个服务器。在上面搭建网站，数据库，优点是可以自己随时备份修改，很方便；缺点是花销比较大，不适合学生党，同时需要自己维护，而自己主要目的是去写文章，而没有精力去维护，所以这种方案Pass. 使用国内CSDN, 博客园都知名博客网站。这种方法的优点是随时随地都可以写文章，而且只要专注于文章就可以，不用考虑维护的事情，">
+<meta name="keywords" content="hexo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hexo搭建个人博客">
+<meta property="og:url" content="http://www.darylliu.cn/archives/64e2e0e2.html">
+<meta property="og:site_name" content="Daryl&#39;s Blog">
+<meta property="og:description" content="hexo搭建个人博客前言最近突然心血来潮想要搭建自己的博客，就去调研了几种方案：  租个服务器。在上面搭建网站，数据库，优点是可以自己随时备份修改，很方便；缺点是花销比较大，不适合学生党，同时需要自己维护，而自己主要目的是去写文章，而没有精力去维护，所以这种方案Pass. 使用国内CSDN, 博客园都知名博客网站。这种方法的优点是随时随地都可以写文章，而且只要专注于文章就可以，不用考虑维护的事情，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.darylliu.cn/img/hexo搭建个人博客/hexo1.png">
+<meta property="og:image" content="http://www.darylliu.cn/img/hexo搭建个人博客/hexo2.png">
+<meta property="og:updated_time" content="2019-06-25T15:11:57.971Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hexo搭建个人博客">
+<meta name="twitter:description" content="hexo搭建个人博客前言最近突然心血来潮想要搭建自己的博客，就去调研了几种方案：  租个服务器。在上面搭建网站，数据库，优点是可以自己随时备份修改，很方便；缺点是花销比较大，不适合学生党，同时需要自己维护，而自己主要目的是去写文章，而没有精力去维护，所以这种方案Pass. 使用国内CSDN, 博客园都知名博客网站。这种方法的优点是随时随地都可以写文章，而且只要专注于文章就可以，不用考虑维护的事情，">
+<meta name="twitter:image" content="http://www.darylliu.cn/img/hexo搭建个人博客/hexo1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1219606132354870",
+    enable_page_level_ads: true
+  });
+</script>
+
+<meta name="baidu_union_verify" content="8bbdd584c3355c9ecaeb5001f4060c0d">
+
+
+
+  <link rel="canonical" href="http://www.darylliu.cn/archives/64e2e0e2.html">
+
+
+
+
+
+  <title> hexo搭建个人博客 | Daryl's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9c78f23ae1aea6b3342689a7e2f9dced";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Daryl's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">学习笔记</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.darylliu.cn/archives/64e2e0e2.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Daryl">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Daryl's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                hexo搭建个人博客
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-21T10:43:23+08:00">
+                2017-04-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/archives/64e2e0e2.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="archives/64e2e0e2.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/archives/64e2e0e2.html" class="leancloud_visitors" data-flag-title="hexo搭建个人博客">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1.3k字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  4分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-1219606132354870" data-ad-slot="3126295718"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <h1 id="hexo搭建个人博客"><a href="#hexo搭建个人博客" class="headerlink" title="hexo搭建个人博客"></a>hexo搭建个人博客</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近突然心血来潮想要搭建自己的博客，就去调研了几种方案：</p>
+<ul>
+<li>租个服务器。在上面搭建网站，数据库，优点是可以自己随时备份修改，很方便；缺点是花销比较大，不适合学生党，同时需要自己维护，而自己主要目的是去写文章，而没有精力去维护，所以这种方案Pass.</li>
+<li>使用国内CSDN, 博客园都知名博客网站。这种方法的优点是随时随地都可以写文章，而且只要专注于文章就可以，不用考虑维护的事情，缺点的话就是他们的网站总是掺杂着各种广告，视觉效果。。。差强人意。</li>
+<li>使用github, 利用一些现有的博客平台，比如node.js的Hexo，直接将本地.md文档生成静态的html文件作为静态页面，并将其部署到gihub pages服务器上。本文采用了这种方法。</li>
+</ul>
+<a id="more"></a>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
+<li>安装git</li>
+<li>安装node.js</li>
+<li>安装hexo</li>
+</ul>
+<h4 id="安装-hexo"><a href="#安装-hexo" class="headerlink" title="安装 hexo"></a>安装 hexo</h4><ol>
+<li>新建目录blog(此处存放你的博客工程)</li>
+<li><p>进入该目录下并执行命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在blog目录下新建目录hexo，并在里面进行hexo初始化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init hexo</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>等一切安装成功之后，执行命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>出现下图所示，即为成功<br><img src="/img/hexo搭建个人博客/hexo1.png" alt><br>可以看到已经成功运行在了本地<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost:4000/</span><br></pre></td></tr></table></figure></p>
+<p>打开网站即可预览到我们的页面</p>
+<h3 id="Hexo-配置"><a href="#Hexo-配置" class="headerlink" title="Hexo 配置"></a>Hexo 配置</h3><h4 id="config-yml-文件配置"><a href="#config-yml-文件配置" class="headerlink" title="_config.yml 文件配置"></a>_config.yml 文件配置</h4><p>关于这个配置文件里的内容，官网有详细介绍，本人在这里只介绍比较重要的几个：</p>
+<ol>
+<li><p>deploy, 配置这部分是为了能够将博客内容发布到线上。</p>
+<pre><code>deploy:
+    type: git
+    repository: git@github.com:你的git用户名/你的git用户名.github.io.git 
+    branch: master
+</code></pre></li>
+<li><p>url, 由于在blog下又建立了一个hexo,所以如果实在本地的话需要将url设置成</p>
+<pre><code>url: http://你的git网址/hexo
+root: /hexo/ 
+</code></pre><p>但是当你上传到服务器时，需要改回</p>
+<pre><code>url: http://你的git网址/
+root: /
+</code></pre></li>
+<li><p>theme, 主题设置<br>在hexo路径下有一个叫做themes的文件夹，里面存放了你所拥有的themes主题模版文件，这些模版都可以从git上进行下载，刚开始创建项目的时候默认是是landscape。如果想要更改博客主题，只要把对应的主题模版下载到该目录并将_config.yml中的themes设置如下</p>
+<pre><code>theme: landscape(你下载的模版文件夹名)
+</code></pre></li>
+</ol>
+<h3 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h3><h4 id="静态文件生成"><a href="#静态文件生成" class="headerlink" title="静态文件生成"></a>静态文件生成</h4><p>每次修改博客或配置文件后记得执行以下命令进行更新</p>
+<pre><code>hexo generate
+</code></pre><h4 id="部署到服务器"><a href="#部署到服务器" class="headerlink" title="部署到服务器"></a>部署到服务器</h4><p>部署到远程服务器执行以下命令</p>
+<pre><code>hexo deploy
+</code></pre><p>如果失败，有可能是因为没有安装git部署器，即hexo/node_moudles下没有hexo-deployer-git，如果是这种情况，可以进入hexo后执行以下命令</p>
+<pre><code>npm install hexo-deployer-git –save
+</code></pre><h3 id="配置过程中遇到的坑"><a href="#配置过程中遇到的坑" class="headerlink" title="配置过程中遇到的坑"></a>配置过程中遇到的坑</h3><h4 id="权限问题"><a href="#权限问题" class="headerlink" title="权限问题"></a>权限问题</h4><p>在往git上部署过程中一直出现</p>
+<p><code>Error: Permission denied (publickey). fatal: Could not read from remote repository.</code></p>
+<p>后来经过在网上查了很多资料发现有两种可能的原因：</p>
+<ol>
+<li>git版本过高，将版本改成git 1.9版本的即可解决(但是本人没有解决，但是对其他很多人有效)</li>
+<li><p>由于当时生成公钥的命令是</p>
+<pre><code>ssh-keygen -t rsa -C “你的git用户名@github.com”
+</code></pre><p> 没有加sudo, 生成的公钥是当前用户的，然而，自己在部署到服务器时为了避免文件访问权限问题直接使用了</p>
+<pre><code>sudo hexo deploy
+</code></pre><p> 该命令在执行的时候会去读取root 用户的公钥，然而显然，root用户下还没有生成对应的公钥信息，所以一直会报公钥权限问题。<br> 解决方法是生成公钥的时候也在前面加上sudo</p>
+<pre><code>sudo ssh-keygen -t rsa -C “你的git用户名@github.com”
+</code></pre></li>
+</ol>
+<h4 id="hexo-generate问题"><a href="#hexo-generate问题" class="headerlink" title="hexo generate问题"></a>hexo generate问题</h4><p>在hexo generate中出现了        </p>
+<p><code>TypeError: Cannot read property &#39;offset&#39; of null</code></p>
+<p>原因是因为hexo 目录下的_confing.yml 和 主题模版文件中的_confing.yml 有关时区配置不一致或者主题模版文件中没有配置时区</p>
+<p>解决办法如下：</p>
+<pre><code>timezone: Asia/Shanghai            
+</code></pre><h3 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h3><h4 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h4><p>由于git上上传的是通过hexo生成的静态文件，并不是原生的.md文件，这意味着一旦你的本地工程文件丢失，很有可能无法找回你的文章。所以本人建议将/hexo/source目录下的文件进行备份，无论是自己本地备份还是上传的git备份都是可行的办法。</p>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><h4 id="打赏功能"><a href="#打赏功能" class="headerlink" title="打赏功能"></a>打赏功能</h4><p>在主题模版配置文件中，添加如下：</p>
+<pre><code>reward_comment: 坚持原创技术分享，您的支持将鼓励我继续创作！
+wechatpay: /图片路径/微信支付二维码图片
+alipay: /图片路径/支付宝支付二维码图片
+</code></pre><h4 id="阅读全文"><a href="#阅读全文" class="headerlink" title="阅读全文"></a>阅读全文</h4><p>有的时候我们希望在主页不要全部显示文章内容，希望在合适的地方截断，并提示显示阅读全文，如下图所示<br>    <img src="/img/hexo搭建个人博客/hexo2.png" alt><br>我们可以在文章内部希望截断的地方添加</p>
+<pre><code>//主页显示内容
+&lt;!--more--&gt;
+//隐藏内容
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/uploads/wechat-qcode.png" alt="Daryl WeChat Pay">
+          <p>微信打赏</p>
+        </div>
+      
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hexo/" rel="tag"># hexo</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/archives/6bed04a6.html" rel="next" title="后台研发知识点总结">
+                <i class="fa fa-chevron-left"></i> 后台研发知识点总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/archives/1e480d2f.html" rel="prev" title="面试官：请你谈谈Java的类加载过程">
+                面试官：请你谈谈Java的类加载过程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 评论区广告 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1219606132354870" data-ad-slot="4156785282" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="Daryl">
+          <p class="site-author-name" itemprop="name">Daryl</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/darylliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://jacksmiththu.github.io" title="JackSmith" target="_blank">JackSmith</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#hexo搭建个人博客"><span class="nav-number">1.</span> <span class="nav-text">hexo搭建个人博客</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">1.2.</span> <span class="nav-text">环境</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装-hexo"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">安装 hexo</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hexo-配置"><span class="nav-number">1.2.1.</span> <span class="nav-text">Hexo 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#config-yml-文件配置"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">_config.yml 文件配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相关命令"><span class="nav-number">1.2.2.</span> <span class="nav-text">相关命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#静态文件生成"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">静态文件生成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署到服务器"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">部署到服务器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置过程中遇到的坑"><span class="nav-number">1.2.3.</span> <span class="nav-text">配置过程中遇到的坑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#权限问题"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">权限问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hexo-generate问题"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">hexo generate问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建议"><span class="nav-number">1.2.4.</span> <span class="nav-text">建议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#备份"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">备份</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展"><span class="nav-number">1.2.5.</span> <span class="nav-text">扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#打赏功能"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">打赏功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#阅读全文"><span class="nav-number">1.2.5.2.</span> <span class="nav-text">阅读全文</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <!-- 侧边栏广告 -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1219606132354870" data-ad-slot="1362622054" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Daryl</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+<div class="BbeiAn-info"">
+  京ICP备 -
+  <a href="http://www.beian.miit.gov.cn">19031408号-1</a>
+  
+</div>
+
+
+        <!-- 
+ -->
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://lnplayer.disqus.com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.darylliu.cn/archives/64e2e0e2.html';
+          this.page.identifier = 'archives/64e2e0e2.html';
+          this.page.title = 'hexo搭建个人博客';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://lnplayer.disqus.com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("qex6MVWdS81UYVJj5P5s3acC-gzGzoHsz", "AqlXEbwQfiMSKTV7jsX1HIyQ");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

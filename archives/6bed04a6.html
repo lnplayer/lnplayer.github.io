@@ -1,0 +1,1165 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+<meta name="google-site-verification" content="VjbNjTpWpGeKE6EKjlutGyQiKadR_XlMTxCtrmFRQaA">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="01A0ZqIsqw">
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Java,后台,面试,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/uploads/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="后台研发知识点总结为了准备面试，特此将后台研发相关知识以及在面试中遇到的实际问题总结出来，以供随时复习。">
+<meta name="keywords" content="Java,后台,面试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="后台研发知识点总结">
+<meta property="og:url" content="http://www.darylliu.cn/archives/6bed04a6.html">
+<meta property="og:site_name" content="Daryl&#39;s Blog">
+<meta property="og:description" content="后台研发知识点总结为了准备面试，特此将后台研发相关知识以及在面试中遇到的实际问题总结出来，以供随时复习。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.darylliu.cn/img/后台研发知识点总结/tcp1.png">
+<meta property="og:image" content="http://www.darylliu.cn/img/后台研发知识点总结/tcp2.png">
+<meta property="og:updated_time" content="2019-06-25T15:11:57.972Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="后台研发知识点总结">
+<meta name="twitter:description" content="后台研发知识点总结为了准备面试，特此将后台研发相关知识以及在面试中遇到的实际问题总结出来，以供随时复习。">
+<meta name="twitter:image" content="http://www.darylliu.cn/img/后台研发知识点总结/tcp1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1219606132354870",
+    enable_page_level_ads: true
+  });
+</script>
+
+<meta name="baidu_union_verify" content="8bbdd584c3355c9ecaeb5001f4060c0d">
+
+
+
+  <link rel="canonical" href="http://www.darylliu.cn/archives/6bed04a6.html">
+
+
+
+
+
+  <title> 后台研发知识点总结 | Daryl's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9c78f23ae1aea6b3342689a7e2f9dced";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Daryl's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">学习笔记</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.darylliu.cn/archives/6bed04a6.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Daryl">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Daryl's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                后台研发知识点总结
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-08T21:21:44+08:00">
+                2017-04-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/archives/6bed04a6.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="archives/6bed04a6.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/archives/6bed04a6.html" class="leancloud_visitors" data-flag-title="后台研发知识点总结">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  4.7k字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  16分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-1219606132354870" data-ad-slot="3126295718"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <h1 id="后台研发知识点总结"><a href="#后台研发知识点总结" class="headerlink" title="后台研发知识点总结"></a>后台研发知识点总结</h1><p>为了准备面试，特此将后台研发相关知识以及在面试中遇到的实际问题总结出来，以供随时复习。</p>
+<a id="more"></a>
+<h2 id="Java-基础知识"><a href="#Java-基础知识" class="headerlink" title="Java 基础知识"></a>Java 基础知识</h2><h3 id="Java-数据类型分为？"><a href="#Java-数据类型分为？" class="headerlink" title="Java 数据类型分为？"></a>Java 数据类型分为？</h3><p>基本数据类型：int ,float, boolean, char, byte, double, long, short<br>引用数据类型：类，数组，接口</p>
+<p>基本数据类型可以在栈中直接分配内存<br>引用数据类型则是数据的引用在栈中，其对象在堆中</p>
+<h3 id="八种基本数据类型？"><a href="#八种基本数据类型？" class="headerlink" title="八种基本数据类型？"></a>八种基本数据类型？</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">字节</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">byte</td>
+<td style="text-align:left">1</td>
+</tr>
+<tr>
+<td style="text-align:left">short</td>
+<td style="text-align:left">2</td>
+</tr>
+<tr>
+<td style="text-align:left">int</td>
+<td style="text-align:left">4</td>
+</tr>
+<tr>
+<td style="text-align:left">long</td>
+<td style="text-align:left">8</td>
+</tr>
+<tr>
+<td style="text-align:left">float</td>
+<td style="text-align:left">4</td>
+</tr>
+<tr>
+<td style="text-align:left">double</td>
+<td style="text-align:left">8</td>
+</tr>
+<tr>
+<td style="text-align:left">char</td>
+<td style="text-align:left">2</td>
+</tr>
+<tr>
+<td style="text-align:left">boolean</td>
+<td style="text-align:left">1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="String，Stringbuffer，StringBuilder的区别？"><a href="#String，Stringbuffer，StringBuilder的区别？" class="headerlink" title="String，Stringbuffer，StringBuilder的区别？"></a>String，Stringbuffer，StringBuilder的区别？</h3><p>String：字符串常量<br>StringBuffer：字符串变量, 线程安全的<br>StringBuilder：字符串变量, 线程非安全的</p>
+<p>三者在执行速度方面的比较：StringBuilder &gt;  StringBuffer  &gt;  String</p>
+<p>对于三者使用的总结： </p>
+<ol>
+<li>如果要操作少量的数据用 = String</li>
+<li>单线程操作字符串缓冲区 下操作大量数据 = StringBuilder</li>
+<li>多线程操作字符串缓冲区 下操作大量数据 = StringBuffer</li>
+</ol>
+<h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2><h3 id="类的实例化顺序，比如父类静态数据，构造函数，字段，子类静态数据，构造函数，字段，他们的执行顺序"><a href="#类的实例化顺序，比如父类静态数据，构造函数，字段，子类静态数据，构造函数，字段，他们的执行顺序" class="headerlink" title="类的实例化顺序，比如父类静态数据，构造函数，字段，子类静态数据，构造函数，字段，他们的执行顺序"></a>类的实例化顺序，比如父类静态数据，构造函数，字段，子类静态数据，构造函数，字段，他们的执行顺序</h3><ol>
+<li>父类静态成员和静态初始化块 ，按在代码中出现的顺序依次执行</li>
+<li>子类静态成员和静态初始化块 ，按在代码中出现的顺序依次执行</li>
+<li>父类实例成员和实例初始化块 ，按在代码中出现的顺序依次执行</li>
+<li>父类构造方法</li>
+<li>子类实例成员和实例初始化块 ，按在代码中出现的顺序依次执行</li>
+<li>子类构造方法<br>结论：对象初始化的顺序，先静态方法，再构造方法，每个又是先基类后子类。</li>
+</ol>
+<h2 id="Java-框架"><a href="#Java-框架" class="headerlink" title="Java 框架"></a>Java 框架</h2><h2 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h2><h3 id="产生死锁的条件？"><a href="#产生死锁的条件？" class="headerlink" title="产生死锁的条件？"></a>产生死锁的条件？</h3><ol>
+<li>互斥条件：一个资源同时只能由一个进程占有，不能有两个或者两个以上的占有。</li>
+<li>不可抢占条件：在一个进程所获取的资源未使用完毕之前，资源申请者不能强行从资源占有者手中抢占资源。</li>
+<li>占有申请条件：进程已经占有了一个资源，但是又需要申请新的资源，但是新申请的资源已经被别的进程占有了，此时，当前进程就会阻塞，但是在获取申请的资源之前，它还会一直占有已占有的那个资源</li>
+<li>循环等待条件：存在一个循环等待序列，p1等待p2，p2等待p3， p3等待p1，形成一个进程循环等待。</li>
+</ol>
+<h2 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h2><h3 id="http1-0和http1-1有什么区别"><a href="#http1-0和http1-1有什么区别" class="headerlink" title="http1.0和http1.1有什么区别"></a>http1.0和http1.1有什么区别</h3><ol>
+<li>HTTP/1.0协议使用非持久连接,即在非持久连接下,一个tcp连接只传输一个Web对象；</li>
+<li>HTTP/1.1默认使用持久连接(然而,HTTP/1.1协议的客户机和服务器可以配置成使用非持久连接)。在持久连接下,不必为每个Web对象的传送建立一个新的连接,一个连接中可以传输多个对象.</li>
+</ol>
+<p>一个WEB站点每天可能要接收到上百万的用户请求，为了提高系统的效率，HTTP 1.0规定浏览器与服务器只保持短暂的连接，浏览器的每次请求都需要与服务器建立一个TCP连接，服务器完成请求处理后立即断开TCP连接，服务器不跟踪每个客户也不记录过去的请求。但是，这也造成了一些性能上的缺陷，例如，一个包含有许多图像的网页文件中并没有包含真正的图像数据内容，而只是指明了这些图像的URL地址，当WEB浏览器访问这个网页文件时，浏览器首先要发出针对该网页文件的请求，当浏览器解析WEB服务器返回的该网页文档中的HTML内容时，发现其中的&lt;img&gt;图像标签后，浏览器将根据&lt;img&gt;标签中的src属性所指定的URL地址再次向服务器发出下载图像数据的请求。<br>显然，访问一个包含有许多图像的网页文件的整个过程包含了多次请求和响应，每次请求和响应都需要建立一个单独的连接，每次连接只是传输一个文档和图像，上一次和下一次请求完全分离。即使图像文件都很小，但是客户端和服务器端每次建立和关闭连接却是一个相对比较费时的过程，并且会严重影响客户机和服务器的性能。当一个网页文件中包含 Applet，JavaScript文件，CSS文件等内容时，也会出现类似上述的情况。<br>为了克服HTTP 1.0的这个缺陷，HTTP 1.1支持持久连接，在一个TCP连接上可以传送多个HTTP请求和响应，减少了建立和关闭连接的消耗和延迟。一个包含有许多图像的网页文件的多个请求和应答可以在一个连接中传输，但每个单独的网页文件的请求和应答仍然需要使用各自的连接。HTTP 1.1还允许客户端不用等待上一次请求结果返回，就可以发出下一次请求，但服务器端必须按照接收到客户端请求的先后顺序依次回送响应结果，以保证客户端能够区分出每次请求的响应内容，这样也显著地减少了整个下载过程所需要的时间。基于HTTP 1.1协议的客户机与服务器的信息交换过程。</p>
+<h3 id="TCP三次握手和四次挥手的流程"><a href="#TCP三次握手和四次挥手的流程" class="headerlink" title="TCP三次握手和四次挥手的流程"></a>TCP三次握手和四次挥手的流程</h3><p><img src="/img/后台研发知识点总结/tcp1.png" alt></p>
+<p><img src="/img/后台研发知识点总结/tcp2.png" alt></p>
+<h3 id="为什么建立连接要进行3次握手-而断开连接要进行4次"><a href="#为什么建立连接要进行3次握手-而断开连接要进行4次" class="headerlink" title="为什么建立连接要进行3次握手,而断开连接要进行4次"></a>为什么建立连接要进行3次握手,而断开连接要进行4次</h3><p>TCP建立连接要进行3次握手,而断开连接要进行4次,这是由于TCP的半关闭造成的,因为TCP连接是全双工的(即数据可在两个方向上同时传递)所以进行关闭时每个方向上都要单独进行关闭,这个单方向的关闭就叫半关闭.<br>关闭的方法是一方完成它的数据传输后,就发送一个FIN来向另一方通告将要终止这个方向的连接.当一端收到一个FIN,它必须通知应用层TCP连接已终止了这个方向的数据传送,发送FIN通常是应用层进行关闭的结果.</p>
+<h3 id="为什么不能两次握手进行连接？"><a href="#为什么不能两次握手进行连接？" class="headerlink" title="为什么不能两次握手进行连接？"></a>为什么不能两次握手进行连接？</h3><p>现在把三次握手改成仅需要两次握手，死锁是可能发生的。作为例子，考虑计算机S和C之间的通信，假定C给S发送一个连接请求分组，S收到了这个分组，并发送了确认应答分组。按照两次握手的协定，S认为连接已经成功地建立了，可以开始发送数据分组。可是，C在S的应答分组在传输中被丢失的情况下，将不知道S是否已准备好，不知道S建立什么样的序列号，C甚至怀疑S是否收到自己的连接请求分组。在这种情况下，C认为连接还未建立成功，将忽略S发来的任何数据分组，只等待连接确认应答分组。而S在发出的分组超时后，重复发送同样的分组。这样就形成了死锁。</p>
+<h3 id="说说你知道的几种HTTP响应码"><a href="#说说你知道的几种HTTP响应码" class="headerlink" title="说说你知道的几种HTTP响应码"></a>说说你知道的几种HTTP响应码</h3><p>1XX Informational（信息性状态码）接收的请求正在处理<br>2XX Success（成功状态码） 请求正常处理完毕<br>3XX Redirection（重定向状态码） 需要进行附加操作以完成请求<br>4XX Client Error（客户端错误状态码）服务器无法处理请求<br>5XX Server Error（服务器错误状态码）服务器处理请求出错</p>
+<p>200：请求被正常处理<br>204：请求被受理但没有资源可以返回<br>206：客户端只是请求资源的一部分，服务器只对请求的部分资源执行GET方法，相应报文中通过Content-Range指定范围的资源。<br>301：永久性重定向<br>302：临时重定向<br>303：与302状态码有相似功能，只是它希望客户端在请求一个URI的时候，能通过GET方法重定向到另一个URI上<br>304：发送附带条件的请求时，条件不满足时返回，与重定向无关<br>307：临时重定向，与302类似，只是强制要求使用POST方法<br>400：请求报文语法有误，服务器无法识别<br>401：请求需要认证<br>403：请求的对应资源禁止被访问<br>404：服务器无法找到对应资源<br>500：服务器内部错误<br>503：服务器正忙</p>
+<h2 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h2><h3 id="数据库事务ACID"><a href="#数据库事务ACID" class="headerlink" title="数据库事务ACID?"></a>数据库事务ACID?</h3><ol>
+<li>A: 原子性：指事务的所有操作要么全部成功，要么全部失败回滚。</li>
+<li>C: 一致性：指事务必须使得数据库从一个一致性状态变换到另一个一致性状态，举个例子，银行转账，无论是用户a转钱给用户b，还是用户b转钱给用户a，两个人的总钱数不能发生变化。</li>
+<li>I: 隔离性：指当多个用户访问数据库的时候，数据库为每一个用户开启的事务不能被其他事务干扰，多个并发事务之间要相互隔离。</li>
+<li>D：持久性：指当事务完成之后，该事务对数据库所作的更改便持久化的保存在数据库中，并不会回滚。</li>
+</ol>
+<h3 id="数据库脏读，幻读，不可重复读都是什么？"><a href="#数据库脏读，幻读，不可重复读都是什么？" class="headerlink" title="数据库脏读，幻读，不可重复读都是什么？"></a>数据库脏读，幻读，不可重复读都是什么？</h3><ol>
+<li>脏读(<strong>多次写中间被读</strong>)<br> 脏读是指在一个事务处理过程里读取了另一个未提交的事务中的数据。<br> 　　当一个事务正在多次修改某个数据，而在这个事务中这多次的修改都还未提交，这时一个并发的事务来访问该数据，就会造成两个事务得到的数据不一致。</li>
+<li><p>不可重复读(<strong>多次读中间被写</strong>)<br> 不可重复读是指在对于数据库中的某个数据，一个事务范围内多次查询却返回了不同的数据值，这是由于在查询间隔，被另一个事务修改并提交了。</p>
+</li>
+<li><p>幻读(<strong>一批数据整体</strong>)<br> 幻读是事务非独立执行时发生的一种现象。例如事务T1对一个表中所有的行的某个数据项做了从“1”修改为“2”的操作，这时事务T2又对这个表中插入了一行数据项，而这个数据项的数值还是为“1”并且提交给数据库。而操作事务T1的用户如果再查看刚刚修改的数据，会发现还有一行没有修改，其实这行是从事务T2中添加的，就好像产生幻觉一样，这就是发生了幻读。<br> 　　幻读和不可重复读都是读取了另一条已经提交的事务（这点就脏读不同），所不同的是不可重复读查询的都是同一个数据项，而幻读针对的是一批数据整体（比如数据的个数）。</p>
+</li>
+</ol>
+<h3 id="MySQL数据库隔离级别有哪几种"><a href="#MySQL数据库隔离级别有哪几种" class="headerlink" title="MySQL数据库隔离级别有哪几种"></a>MySQL数据库隔离级别有哪几种</h3><ol>
+<li>Serializable (串行化)：可避免脏读、不可重复读、幻读的发生。</li>
+<li>Repeatable read (可重复读)：可避免脏读、不可重复读的发生。</li>
+<li>Read committed (读已提交)：可避免脏读的发生。</li>
+<li>Read uncommitted (读未提交)：最低级别，任何情况都无法保证。</li>
+</ol>
+<p><strong><font color="red">一般数据库默认的隔离级别是Read committed (读已提交)， 但是MySQL是个例外，默认隔离级别是Repeatable read (可重复读)</font></strong></p>
+<h3 id="MySQL四种隔离级别是怎么实现的？"><a href="#MySQL四种隔离级别是怎么实现的？" class="headerlink" title="MySQL四种隔离级别是怎么实现的？"></a>MySQL四种隔离级别是怎么实现的？</h3><ol>
+<li>Read uncommitted(未授权读取、读未提交)：<br>如果一个事务已经开始写数据，则另外一个事务则不允许同时进行写操作，但允许其他事务读此行数据。该隔离级别可以通过“排他写锁”实现。<br>避免了更新丢失，却可能出现脏读。也就是说事务B读取到了事务A未提交的数据。</li>
+<li>Read committed（授权读取、读提交）：<br>读取数据的事务允许其他事务继续访问该行数据，但是未提交的写事务将会禁止其他事务访问该行。<br>该隔离级别避免了脏读，但是却可能出现不可重复读。事务A事先读取了数据，事务B紧接了更新了数据，并提交了事务，而事务A再次读取该数据时，数据已经发生了改变。</li>
+<li>Repeatable read（可重复读取）：<br>读取数据的事务将会禁止写事务（但允许读事务），写事务则禁止任何其他事务。<br>避免了不可重复读取和脏读，但是有时可能出现幻读。这可以通过“共享读锁”和“排他写锁”实现。</li>
+<li>Serializable（序列化）：<br>提供严格的事务隔离。它要求事务序列化执行，事务只能一个接着一个地执行，但不能并发执行。如果仅仅通过“行级锁”是无法实现事务序列化的，必须通过其他机制保证新插入的数据不会被刚执行查询操作的事务访问到。<br>序列化是最高的事务隔离级别，同时代价也花费最高，性能很低，一般很少使用，在该级别下，事务顺序执行，不仅可以避免脏读、不可重复读，还避免了幻像读。</li>
+</ol>
+<h3 id="什么情况下使用缓存"><a href="#什么情况下使用缓存" class="headerlink" title="什么情况下使用缓存"></a>什么情况下使用缓存</h3><p>对于内容变换缓慢或者不太重要，但又需要频繁查询数据库或从源头计算的中间结果或最终结果，我们可以采取使用缓存的方法，将其写到缓存中，每次使用时，只要缓存有效，就可直接使用缓存，不用再到数据库中取或重新计算</p>
+<h3 id="数据库左外连接和右外连接有什么区别？"><a href="#数据库左外连接和右外连接有什么区别？" class="headerlink" title="数据库左外连接和右外连接有什么区别？"></a>数据库左外连接和右外连接有什么区别？</h3><p>左连接是以左边表中的数据为基准，如果左表中有数据，右表中没有数据，则显示：左表中的数据    右表中的数据(为空)<br>换句话说，左连接的结果集包括left子句中指定的左表的所有行，而不仅仅是连接匹配到的行，<strong>如果左表中的某行在右表中没有匹配行，则在结果集中相关联列有关右表的列均为空值(因为没有匹配行)</strong><br>右连接则正好相反，如果右表的某行在左表中没有匹配行，则左表返回空值</p>
+<h3 id="主键和unique的区别"><a href="#主键和unique的区别" class="headerlink" title="主键和unique的区别"></a>主键和unique的区别</h3><ol>
+<li>主键一定是唯一性索引，唯一性索引并不一定就是主键；</li>
+<li>一个表中可以有多个唯一性索引，但只能有一个主键；</li>
+<li>主键列不允许空值，而唯一性索引列允许空值。</li>
+</ol>
+<h2 id="Redis-amp-缓存相关"><a href="#Redis-amp-缓存相关" class="headerlink" title="Redis&amp;缓存相关"></a>Redis&amp;缓存相关</h2><h3 id="Redis的数据淘汰策略"><a href="#Redis的数据淘汰策略" class="headerlink" title="Redis的数据淘汰策略"></a>Redis的数据淘汰策略</h3><p>在 Redis 中，允许用户设置最大使用内存大小 server.maxmemory, redis 内存数据集大小上升到一定大小的时候，就会施行数据淘汰策略。redis 提供 6种数据淘汰策略：</p>
+<ol>
+<li>volatile-lru：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据淘汰</li>
+<li>volatile-ttl：从已设置过期时间的数据集（server.db[i].expires）中挑选将要过期的数据淘汰</li>
+<li>volatile-random：从已设置过期时间的数据集（server.db[i].expires）中任意选择数据淘汰</li>
+<li>allkeys-lru：从数据集（server.db[i].dict）中挑选最近最少使用的数据淘汰</li>
+<li>allkeys-random：从数据集（server.db[i].dict）中任意选择数据淘汰</li>
+<li>no-enviction（驱逐）：禁止驱逐数据</li>
+</ol>
+<p>redis 确定驱逐某个键值对后，会删除这个数据并，并将这个数据变更消息发布到本地（AOF 持久化）和从机（主从连接）。</p>
+<h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><h3 id="如何查找一个进程"><a href="#如何查找一个进程" class="headerlink" title="如何查找一个进程"></a>如何查找一个进程</h3><p>使用<strong>ps</strong>命令可以查看进程状态<br><strong>ps -ef</strong>可以查看所有进程，配合<strong>grep</strong>命令可以进行筛选，如查看tomcat进程的命令: <strong>ps -ef | grep tomcat </strong></p>
+<h2 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h2><h3 id="在装饰器模式和代理模式之间，你如何抉择"><a href="#在装饰器模式和代理模式之间，你如何抉择" class="headerlink" title="在装饰器模式和代理模式之间，你如何抉择"></a>在装饰器模式和代理模式之间，你如何抉择</h3><p>装饰器模式关注于在一个对象上动态的添加方法，然而代理模式关注于控制对对象的访问。换句话 说，用代理模式，代理类（proxy class）可以对它的客户隐藏一个对象的具体信息。因此，当使用代理模式的时候，我们常常在一个代理类中创建一个对象的实例。并且，当我们使用装饰器模 式的时候，我们通常的做法是将原始对象作为一个参数传给装饰者的构造器。</p>
+<h2 id="常见算法题"><a href="#常见算法题" class="headerlink" title="常见算法题"></a>常见算法题</h2><h2 id="工程实践"><a href="#工程实践" class="headerlink" title="工程实践"></a>工程实践</h2><h3 id="后台系统怎么防止请求重复提交？"><a href="#后台系统怎么防止请求重复提交？" class="headerlink" title="后台系统怎么防止请求重复提交？"></a>后台系统怎么防止请求重复提交？</h3><p>首先我们在进入表单填写页面时，在服务器端生成一个唯一的随机标识号，专业术语称为Token(令牌)，同时在当前用户的Session域中保存这个Token。然后将Token发送到客户端的Form表单中，在Form表单中使用隐藏域来存储这个Token，表单提交的时候连同这个Token一起提交到服务器端，然后在服务器端判断客户端提交上来的Token与服务器端生成的Token是否一致，如果不一致，那就是重复提交了，此时服务器端就可以不处理重复提交的表单。如果相同则处理表单提交，并清除当前用户的Session域中存储的标识号。<br>在下列情况下，服务器程序将拒绝处理用户提交的表单请求：</p>
+<ol>
+<li>存储Session域中的Token(令牌)与表单提交的Token(令牌)不同。</li>
+<li>当前用户的Session中不存在Token(令牌)。</li>
+<li>用户提交的表单数据中没有Token(令牌)。<br><strong><font color="red">需要注意的是当比对成功后，必须立即将该Session的值设置为空，这样才可保证页面再次POST时表单中的校验串就无法于Session中的空值比对成功。</font></strong></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/uploads/wechat-qcode.png" alt="Daryl WeChat Pay">
+          <p>微信打赏</p>
+        </div>
+      
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/后台/" rel="tag"># 后台</a>
+          
+            <a href="/tags/面试/" rel="tag"># 面试</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/archives/c31d0419.html" rel="next" title="SpringBoot学习6之Logback日志导入mongodb">
+                <i class="fa fa-chevron-left"></i> SpringBoot学习6之Logback日志导入mongodb
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/archives/64e2e0e2.html" rel="prev" title="hexo搭建个人博客">
+                hexo搭建个人博客 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 评论区广告 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1219606132354870" data-ad-slot="4156785282" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="Daryl">
+          <p class="site-author-name" itemprop="name">Daryl</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/darylliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://jacksmiththu.github.io" title="JackSmith" target="_blank">JackSmith</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#后台研发知识点总结"><span class="nav-number">1.</span> <span class="nav-text">后台研发知识点总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-基础知识"><span class="nav-number">1.1.</span> <span class="nav-text">Java 基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-数据类型分为？"><span class="nav-number">1.1.1.</span> <span class="nav-text">Java 数据类型分为？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#八种基本数据类型？"><span class="nav-number">1.1.2.</span> <span class="nav-text">八种基本数据类型？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String，Stringbuffer，StringBuilder的区别？"><span class="nav-number">1.1.3.</span> <span class="nav-text">String，Stringbuffer，StringBuilder的区别？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM"><span class="nav-number">1.2.</span> <span class="nav-text">JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类的实例化顺序，比如父类静态数据，构造函数，字段，子类静态数据，构造函数，字段，他们的执行顺序"><span class="nav-number">1.2.1.</span> <span class="nav-text">类的实例化顺序，比如父类静态数据，构造函数，字段，子类静态数据，构造函数，字段，他们的执行顺序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-框架"><span class="nav-number">1.3.</span> <span class="nav-text">Java 框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统"><span class="nav-number">1.4.</span> <span class="nav-text">操作系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#产生死锁的条件？"><span class="nav-number">1.4.1.</span> <span class="nav-text">产生死锁的条件？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算机网络"><span class="nav-number">1.5.</span> <span class="nav-text">计算机网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#http1-0和http1-1有什么区别"><span class="nav-number">1.5.1.</span> <span class="nav-text">http1.0和http1.1有什么区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP三次握手和四次挥手的流程"><span class="nav-number">1.5.2.</span> <span class="nav-text">TCP三次握手和四次挥手的流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么建立连接要进行3次握手-而断开连接要进行4次"><span class="nav-number">1.5.3.</span> <span class="nav-text">为什么建立连接要进行3次握手,而断开连接要进行4次</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么不能两次握手进行连接？"><span class="nav-number">1.5.4.</span> <span class="nav-text">为什么不能两次握手进行连接？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#说说你知道的几种HTTP响应码"><span class="nav-number">1.5.5.</span> <span class="nav-text">说说你知道的几种HTTP响应码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库"><span class="nav-number">1.6.</span> <span class="nav-text">数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库事务ACID"><span class="nav-number">1.6.1.</span> <span class="nav-text">数据库事务ACID?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库脏读，幻读，不可重复读都是什么？"><span class="nav-number">1.6.2.</span> <span class="nav-text">数据库脏读，幻读，不可重复读都是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL数据库隔离级别有哪几种"><span class="nav-number">1.6.3.</span> <span class="nav-text">MySQL数据库隔离级别有哪几种</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL四种隔离级别是怎么实现的？"><span class="nav-number">1.6.4.</span> <span class="nav-text">MySQL四种隔离级别是怎么实现的？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么情况下使用缓存"><span class="nav-number">1.6.5.</span> <span class="nav-text">什么情况下使用缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库左外连接和右外连接有什么区别？"><span class="nav-number">1.6.6.</span> <span class="nav-text">数据库左外连接和右外连接有什么区别？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主键和unique的区别"><span class="nav-number">1.6.7.</span> <span class="nav-text">主键和unique的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-amp-缓存相关"><span class="nav-number">1.7.</span> <span class="nav-text">Redis&amp;缓存相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis的数据淘汰策略"><span class="nav-number">1.7.1.</span> <span class="nav-text">Redis的数据淘汰策略</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux"><span class="nav-number">1.8.</span> <span class="nav-text">Linux</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何查找一个进程"><span class="nav-number">1.8.1.</span> <span class="nav-text">如何查找一个进程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计模式"><span class="nav-number">1.9.</span> <span class="nav-text">设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在装饰器模式和代理模式之间，你如何抉择"><span class="nav-number">1.9.1.</span> <span class="nav-text">在装饰器模式和代理模式之间，你如何抉择</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见算法题"><span class="nav-number">1.10.</span> <span class="nav-text">常见算法题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工程实践"><span class="nav-number">1.11.</span> <span class="nav-text">工程实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#后台系统怎么防止请求重复提交？"><span class="nav-number">1.11.1.</span> <span class="nav-text">后台系统怎么防止请求重复提交？</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <!-- 侧边栏广告 -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1219606132354870" data-ad-slot="1362622054" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Daryl</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+<div class="BbeiAn-info"">
+  京ICP备 -
+  <a href="http://www.beian.miit.gov.cn">19031408号-1</a>
+  
+</div>
+
+
+        <!-- 
+ -->
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://lnplayer.disqus.com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.darylliu.cn/archives/6bed04a6.html';
+          this.page.identifier = 'archives/6bed04a6.html';
+          this.page.title = '后台研发知识点总结';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://lnplayer.disqus.com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("qex6MVWdS81UYVJj5P5s3acC-gzGzoHsz", "AqlXEbwQfiMSKTV7jsX1HIyQ");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

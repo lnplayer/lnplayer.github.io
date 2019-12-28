@@ -1,0 +1,1057 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+<meta name="google-site-verification" content="VjbNjTpWpGeKE6EKjlutGyQiKadR_XlMTxCtrmFRQaA">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="01A0ZqIsqw">
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Java,IO,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/uploads/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="从同步阻塞聊到Java三种IO方式对于刚刚成为程序猿不久的人，可能常常会被以下几个概念所混淆：同步，异步，阻塞，非阻塞？以及从这几个概念中衍生出的几个概念，同步阻塞，同步非阻塞，异步阻塞，异步非阻塞？ 小编从网上查了一些资料，发现对于这些概念的解释，要么过于简单随性，以偏概全，要么过于底层，不利于初学者记忆，反而加深了混淆。 今天小编特意从网上和书籍中收集的答案进行整理，抛砖引玉，跟大家简单聊聊这">
+<meta name="keywords" content="Java,IO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从同步阻塞聊到Java三种IO方式">
+<meta property="og:url" content="http://www.darylliu.cn/archives/aefafc8e.html">
+<meta property="og:site_name" content="Daryl&#39;s Blog">
+<meta property="og:description" content="从同步阻塞聊到Java三种IO方式对于刚刚成为程序猿不久的人，可能常常会被以下几个概念所混淆：同步，异步，阻塞，非阻塞？以及从这几个概念中衍生出的几个概念，同步阻塞，同步非阻塞，异步阻塞，异步非阻塞？ 小编从网上查了一些资料，发现对于这些概念的解释，要么过于简单随性，以偏概全，要么过于底层，不利于初学者记忆，反而加深了混淆。 今天小编特意从网上和书籍中收集的答案进行整理，抛砖引玉，跟大家简单聊聊这">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-06-25T15:11:57.972Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从同步阻塞聊到Java三种IO方式">
+<meta name="twitter:description" content="从同步阻塞聊到Java三种IO方式对于刚刚成为程序猿不久的人，可能常常会被以下几个概念所混淆：同步，异步，阻塞，非阻塞？以及从这几个概念中衍生出的几个概念，同步阻塞，同步非阻塞，异步阻塞，异步非阻塞？ 小编从网上查了一些资料，发现对于这些概念的解释，要么过于简单随性，以偏概全，要么过于底层，不利于初学者记忆，反而加深了混淆。 今天小编特意从网上和书籍中收集的答案进行整理，抛砖引玉，跟大家简单聊聊这">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1219606132354870",
+    enable_page_level_ads: true
+  });
+</script>
+
+<meta name="baidu_union_verify" content="8bbdd584c3355c9ecaeb5001f4060c0d">
+
+
+
+  <link rel="canonical" href="http://www.darylliu.cn/archives/aefafc8e.html">
+
+
+
+
+
+  <title> 从同步阻塞聊到Java三种IO方式 | Daryl's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9c78f23ae1aea6b3342689a7e2f9dced";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Daryl's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">学习笔记</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.darylliu.cn/archives/aefafc8e.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Daryl">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Daryl's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                从同步阻塞聊到Java三种IO方式
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-22T15:23:27+08:00">
+                2018-03-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/archives/aefafc8e.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="archives/aefafc8e.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/archives/aefafc8e.html" class="leancloud_visitors" data-flag-title="从同步阻塞聊到Java三种IO方式">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1.9k字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  6分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-1219606132354870" data-ad-slot="3126295718"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <h1 id="从同步阻塞聊到Java三种IO方式"><a href="#从同步阻塞聊到Java三种IO方式" class="headerlink" title="从同步阻塞聊到Java三种IO方式"></a>从同步阻塞聊到Java三种IO方式</h1><p>对于刚刚成为程序猿不久的人，可能常常会被以下几个概念所混淆：<br>同步，异步，阻塞，非阻塞？以及从这几个概念中衍生出的几个概念，同步阻塞，同步非阻塞，异步阻塞，异步非阻塞？</p>
+<p>小编从网上查了一些资料，发现对于这些概念的解释，要么过于简单随性，以偏概全，要么过于底层，不利于初学者记忆，反而加深了混淆。</p>
+<p>今天小编特意从网上和书籍中收集的答案进行整理，抛砖引玉，跟大家简单聊聊这几个概念。</p>
+<a id="more"></a>
+<h2 id="快速理解"><a href="#快速理解" class="headerlink" title="快速理解"></a>快速理解</h2><p>首先，我们要先对这几个概念有一个直观的理解，对于初学者来说，你可以这样看待这几个概念：</p>
+<h3 id="阻塞非阻塞-指的是在客户端"><a href="#阻塞非阻塞-指的是在客户端" class="headerlink" title="阻塞非阻塞 指的是在客户端"></a>阻塞非阻塞 指的是在客户端</h3><p>阻塞: 意味着 客户端提出一个请求以后，在得到回应之前，只能等待<br>非阻塞: 意味着 客户端提出一个请求以后，在得到回应之前，客户端还可以做其他事情，可以继续提其他请求</p>
+<h3 id="同步异步-指的是服务器端"><a href="#同步异步-指的是服务器端" class="headerlink" title="同步异步 指的是服务器端"></a>同步异步 指的是服务器端</h3><p>同步：意味着 服务器接受一个请求后，在返回结果以前不能接受其他请求<br>异步：意味着 服务器接受一个请求后，尽管还没有返回结果，但是可以继续接受其他请求<br>这样的理解其实是过于以偏概全的，因为这只是消息通知场景中的解释，但是通过代入客户端，服务器端更加方便初学者理解，因此在这里，暂且先这样解释。</p>
+<h2 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h2><p>小明领着女朋友去超市购物，买了很多东西，当他走到收银员那里结账的时候，小明(客户端)发出了要求结账的讯息(请求)，收银员(服务器)会对他这一要求进行处理。此时有可能产生多种场景</p>
+<p>小明傻傻地等着收银员用计算器算出所有物品的总价，并准备付款。(同步阻塞)<br>小明觉得自己太傻了，于是一边和女朋友聊天，一边催促收银员快点计算出总价。(同步非阻塞)<br>小明傻傻地等着收银员的总价结果，收银员却把计算的工作交给计算机之后就去拿袋子帮忙装东西，直到计算机上出现了总价结果，收银员才继续回来完成收款工作。(异步阻塞)<br>小明觉得自己太傻了，于是一边和女朋友聊天，一边催出收银员快点计算出总价，而收银员却把计算的工作交给计算机之后就去拿袋子帮忙装东西，直到计算机上出现了总价结果，收银员才继续回来完成收款工作。(异步非阻塞)<br>此时的同步异步，指的是收银员是否在处理收款这一请求的过程中去做了其他的事情，这也导致了收款的结果是当时告诉了小明，还是之后又进行了额外的通知。</p>
+<p>而阻塞非阻塞，指的是小明是否在等待处理结果的过程中去做了其他的事情。</p>
+<p>那么因此，就能得出结论：</p>
+<p>同步和异步：关注的是被调用者是否会通过原调用通知调用者。换句话说，处理请求者是通过原调用将结果返回，还是通过其他方式将结果通知调用者。</p>
+<p>阻塞和非阻塞：关注的是调用者是否会一直等待被调用者的通知。换句话说，发出请求者是否会在等待过程中去做别的事情。</p>
+<h2 id="简单的记忆方法"><a href="#简单的记忆方法" class="headerlink" title="简单的记忆方法"></a>简单的记忆方法</h2><p>同步阻塞：A调用B，然后A一直等待B的返回；B执行完后通过原调用接口返回结果。<br>同步非阻塞：A调用B，然后A执行其他操作，隔段时间看看原调用接口是否有返回结果；B执行完后通过原调用接口返回结果。<br>异步阻塞：A调用B，然后A一直等待B的回调；B执行完后通过回调、状态等其他方式通知A结果。<br>异步非阻塞：A调用B，然后A继续做别的，不再搭理B；B执行完后通过回调、状态等其他方式通知A结果。</p>
+<h2 id="Java-中的BIO-NIO和AIO"><a href="#Java-中的BIO-NIO和AIO" class="headerlink" title="Java 中的BIO,NIO和AIO"></a>Java 中的BIO,NIO和AIO</h2><p>在Java中，同步异步，阻塞非阻塞的概念也应用到了很多方面，比如最常见，也是面试官经常考察的就是有关Java中几种IO方式。</p>
+<p>Java中IO的方式通常分为同步阻塞的BIO，同步非阻塞的NIO，异步非阻塞的AIO。</p>
+<h3 id="BIO同步阻塞"><a href="#BIO同步阻塞" class="headerlink" title="BIO同步阻塞"></a>BIO同步阻塞</h3><p>如果你还记得我们在学习程序设计语言之初，完成的socket编程，大概就会了解到BIO的基本工作原理。</p>
+<p>一个socket连接一个处理线程，这个线程负责相关数据传输操作，每个服务器需要多个这样的处理线程，然而这种情况下，当多个socket向服务器申请建立连接时，受限于操作系统所允许的最大线程数量的限制，服务器不能提供相应数量的处理线程，没有分配到处理线程的连接就会阻塞等待，所以BIO是阻塞的。</p>
+<p>又因为，当进行IO操作时，由Java自己本身处理IO的读写，所以是同步的。</p>
+<h3 id="NIO同步非阻塞"><a href="#NIO同步非阻塞" class="headerlink" title="NIO同步非阻塞"></a>NIO同步非阻塞</h3><p>在BIO的基础上，NIO作出了改进。考虑到每一个socket连接只有在部分时间才进行了数据传输，大多数时间都是空闲的，而在空闲的时间依然要占用线程，这就造成了浪费。</p>
+<p>当客户端的socket连接到服务器端时，不再是每个连接分配一个处理线程，而是服务器端会专门开辟一个”注册中心”统一对其进行管理。当检测到有IO事件请求发生的时候，服务器此时才启动一个处理线程对其进行处理，这种方法解决了因为线程数量的限制，导致socket接入阻塞的问题，因此是非阻塞的。</p>
+<h3 id="AIO异步非阻塞"><a href="#AIO异步非阻塞" class="headerlink" title="AIO异步非阻塞"></a>AIO异步非阻塞</h3><p>在NIO中，当Java对IO请求进行处理时，可能会需要对后端资源(比如数据库连接)进行等待，并发量小的时候还好，一旦并发量增大，则也会对服务器的性能造成影响，因此，有人提出了AIO的概念。</p>
+<p>与NIO不同的时，对于IO请求的处理，Java将其委托给了操作系统，不再阻塞等待，当操作系统完成了相应的IO处理之后，再去通知服务器，启动线程继续对结果进行处理。因此是异步的。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>总的来说，大家可以这样记忆：</p>
+<p>BIO是一个连接一个线程。(连接阻塞，Java处理IO同步)</p>
+<p>NIO是一个请求一个线程。(没有请求时，连接不占用线程，连接非阻塞，Java处理IO同步)</p>
+<p>AIO是一个有效请求一个线程。(连接非阻塞，Java处理IO委托给操作系统，异步进行处理)</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/uploads/wechat-qcode.png" alt="Daryl WeChat Pay">
+          <p>微信打赏</p>
+        </div>
+      
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/IO/" rel="tag"># IO</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/archives/228096a5.html" rel="next" title="初识：数据库事务隔离级别">
+                <i class="fa fa-chevron-left"></i> 初识：数据库事务隔离级别
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/archives/6a1f6623.html" rel="prev" title="hexo个人next主题博客接入谷歌广告">
+                hexo个人next主题博客接入谷歌广告 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 评论区广告 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1219606132354870" data-ad-slot="4156785282" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="Daryl">
+          <p class="site-author-name" itemprop="name">Daryl</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/darylliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://jacksmiththu.github.io" title="JackSmith" target="_blank">JackSmith</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#从同步阻塞聊到Java三种IO方式"><span class="nav-number">1.</span> <span class="nav-text">从同步阻塞聊到Java三种IO方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#快速理解"><span class="nav-number">1.1.</span> <span class="nav-text">快速理解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#阻塞非阻塞-指的是在客户端"><span class="nav-number">1.1.1.</span> <span class="nav-text">阻塞非阻塞 指的是在客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步异步-指的是服务器端"><span class="nav-number">1.1.2.</span> <span class="nav-text">同步异步 指的是服务器端</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#举个例子"><span class="nav-number">1.2.</span> <span class="nav-text">举个例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单的记忆方法"><span class="nav-number">1.3.</span> <span class="nav-text">简单的记忆方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-中的BIO-NIO和AIO"><span class="nav-number">1.4.</span> <span class="nav-text">Java 中的BIO,NIO和AIO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BIO同步阻塞"><span class="nav-number">1.4.1.</span> <span class="nav-text">BIO同步阻塞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NIO同步非阻塞"><span class="nav-number">1.4.2.</span> <span class="nav-text">NIO同步非阻塞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AIO异步非阻塞"><span class="nav-number">1.4.3.</span> <span class="nav-text">AIO异步非阻塞</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">1.5.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <!-- 侧边栏广告 -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1219606132354870" data-ad-slot="1362622054" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Daryl</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+<div class="BbeiAn-info"">
+  京ICP备 -
+  <a href="http://www.beian.miit.gov.cn">19031408号-1</a>
+  
+</div>
+
+
+        <!-- 
+ -->
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://lnplayer.disqus.com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.darylliu.cn/archives/aefafc8e.html';
+          this.page.identifier = 'archives/aefafc8e.html';
+          this.page.title = '从同步阻塞聊到Java三种IO方式';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://lnplayer.disqus.com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("qex6MVWdS81UYVJj5P5s3acC-gzGzoHsz", "AqlXEbwQfiMSKTV7jsX1HIyQ");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

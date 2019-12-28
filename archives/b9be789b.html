@@ -1,0 +1,1124 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+<meta name="google-site-verification" content="VjbNjTpWpGeKE6EKjlutGyQiKadR_XlMTxCtrmFRQaA">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="01A0ZqIsqw">
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Redis,底层数据结构,源码,sds,链表,字典,整数集合,跳跃表,压缩列表">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/uploads/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="本文简单介绍redis五种不同类型的对象，剖析底层数据结构，总结优点和缺点，帮助大家理解和记忆。本书主要为这本书的读书笔记，有问题的地方欢迎指正">
+<meta name="keywords" content="Redis,底层数据结构,源码,sds,链表,字典,整数集合,跳跃表,压缩列表">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis设计与实现-底层数据结构">
+<meta property="og:url" content="http://www.darylliu.cn/archives/b9be789b.html">
+<meta property="og:site_name" content="Daryl&#39;s Blog">
+<meta property="og:description" content="本文简单介绍redis五种不同类型的对象，剖析底层数据结构，总结优点和缺点，帮助大家理解和记忆。本书主要为这本书的读书笔记，有问题的地方欢迎指正">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-10T14:36:06.350Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis设计与实现-底层数据结构">
+<meta name="twitter:description" content="本文简单介绍redis五种不同类型的对象，剖析底层数据结构，总结优点和缺点，帮助大家理解和记忆。本书主要为这本书的读书笔记，有问题的地方欢迎指正">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1219606132354870",
+    enable_page_level_ads: true
+  });
+</script>
+
+<meta name="baidu_union_verify" content="8bbdd584c3355c9ecaeb5001f4060c0d">
+
+
+
+  <link rel="canonical" href="http://www.darylliu.cn/archives/b9be789b.html">
+
+
+
+
+
+  <title> Redis设计与实现-底层数据结构 | Daryl's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9c78f23ae1aea6b3342689a7e2f9dced";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Daryl's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">学习笔记</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.darylliu.cn/archives/b9be789b.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Daryl">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Daryl's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                Redis设计与实现-底层数据结构
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-01T22:39:21+08:00">
+                2019-07-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/专题/" itemprop="url" rel="index">
+                    <span itemprop="name">专题</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/archives/b9be789b.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="archives/b9be789b.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/archives/b9be789b.html" class="leancloud_visitors" data-flag-title="Redis设计与实现-底层数据结构">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  2k字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  7分钟
+                </span>
+              
+            </div>
+          
+
+          
+              <div class="post-description">
+                  本文简单介绍redis五种不同类型的对象，剖析底层数据结构，总结优点和缺点，帮助大家理解和记忆。本书主要为<redis设计与实现>这本书的读书笔记，有问题的地方欢迎指正
+              </redis设计与实现></div>
+          
+
+        </div>
+      </header>
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-1219606132354870" data-ad-slot="3126295718"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>本文简单介绍五种不同类型的对象，剖析底层数据结构，总结优点和缺点，帮助大家理解和记忆</p>
+<h2 id="SDS简单动态字符串"><a href="#SDS简单动态字符串" class="headerlink" title="SDS简单动态字符串"></a>SDS简单动态字符串</h2><p>定义如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">struct sdshdr &#123;</span><br><span class="line">    //记录buf数组中已使用字节的数量</span><br><span class="line">    //等于SDS所保存字符串的长度</span><br><span class="line">    int len;</span><br><span class="line">    </span><br><span class="line">    //记录buf数组中未使用字节的数量</span><br><span class="line">    int free;</span><br><span class="line">    </span><br><span class="line">    // 字节数组，用于保存字符串</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>C 语言使用长度未N+1的字符数组来表示长度为N的字符串，并且字符数组的最后一个元素总是’\0’。</p>
+<p>这样的设计有几个坏处：</p>
+<ol>
+<li>每次获取字符串长度的操作复杂度为O(n)，通过遍历字符数组获得。</li>
+<li>对于一些二进制数据，包含一些特殊字符，乃至于’\0’字符，无法保存</li>
+<li>缓冲区溢出。s1为”redis”, s2为”cluster”， 二者内存相连，一旦s1发生变更为更长的字符串如’redis_test’，则会影响s2的值</li>
+<li>每次扩展和截断字符串，都需要进行耗时严重的内存重分配操作</li>
+</ol>
+<p>SDS的结构则完美避开了这些风险：</p>
+<ol>
+<li>通过len记录了字符串长度，每次获取长度操作为O(1)</li>
+<li>由于不需要根据末尾的空字符判定字符串结束，所以支持复杂的二进制数据</li>
+<li>杜绝缓冲区溢出，在修改字符串之前会首先根据len判断空间是否足够，不够的话，进行空间大小的修改</li>
+<li>扩展字符串采用空间预分配策略，截断字符串采用惰性空间释放策略。</li>
+</ol>
+<p><strong>空间预分配</strong></p>
+<ol>
+<li>如果对SDS进行修改时，len的值小于1MB，那么预分配和len同样大小的未使用空间，即free == len</li>
+<li><p>如果len的值大于1MB，那么程序会固定分配1MB的free</p>
+<p>​</p>
+</li>
+</ol>
+<p><strong>惰性空间释放</strong></p>
+<ol>
+<li>当需要进行截断操作时，程序并不立即使用内存重分配收回多余内存，而是使用free来记录多出来的字节，并等待将来的使用</li>
+<li>SDS存在api可以真正删除未使用的空间</li>
+</ol>
+<h2 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h2><p>redis实现的c语言本身没有内置链表，因此redis自己实现了一套。</p>
+<p>定义如下（<strong>注意，是双向链表</strong>）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">typedef struct listNode &#123;</span><br><span class="line">    //前置节点</span><br><span class="line">    struct listNode *prev;</span><br><span class="line">    </span><br><span class="line">    //后置节点</span><br><span class="line">    struct listNode *next;</span><br><span class="line">    </span><br><span class="line">    //节点的值</span><br><span class="line">    void *value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">typedef struct list &#123;</span><br><span class="line">    //表头节点</span><br><span class="line">    listNode *head;</span><br><span class="line">    </span><br><span class="line">    //表尾节点</span><br><span class="line">    listNode *tail;</span><br><span class="line">    </span><br><span class="line">    //链表节点数量</span><br><span class="line">    unsigned long length;</span><br><span class="line">    </span><br><span class="line">    //表头值复制函数</span><br><span class="line">    void *(*dup)(void *ptr);</span><br><span class="line">    </span><br><span class="line">    //表头值释放函数</span><br><span class="line">    void *(*free)(void *ptr);</span><br><span class="line">    </span><br><span class="line">    //节点值对比函数</span><br><span class="line">    void *(*match)(void *ptr, void *key);</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>redis链表的特点：</p>
+<ol>
+<li>双向</li>
+<li>无环</li>
+<li>带表头指针和表尾指针，获取复杂度为O(1)</li>
+<li>带链表长度计数器，获取复杂度为O(1)</li>
+</ol>
+<h2 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h2><p>redis实现的c语言本身没有内置字典（键值对），因此redis自己实现了一套。</p>
+<p>字典使用哈希表实现。</p>
+<p>哈希表整体实现使用<strong>拉链法</strong>实现。</p>
+<p>每个字典包含了一个长度为2的哈希表数组ht，这个数组一般只使用ht[0]的哈希表，ht[1]只会在对ht[0]rehash时使用。</p>
+<p>如果两个键hash之后发生冲突，则在相同的索引下，构成一个链表，新节点位于头部（因为没有指向链表尾部的指针）。</p>
+<p>当哈希表需要扩展和收缩时，策略是：</p>
+<ol>
+<li>为ht[1]分配空间，如果是扩展操作，则大小为第一个大于等于ht[0]已经使用的节点数的2倍数的2的n 次幂（有点绕，比如已经使用了5，那么应该扩展为5 * 2 = 10 &lt; 16 即16的空间）</li>
+<li>如果是收缩操作，则大小为第一个大于等于ht[0]已经使用的节点数的2的n 次幂（比如已经使用了5，那么应该扩展为5 &lt; 8 即8的空间）</li>
+<li>将ht[0]上的键值对重新rehash计算索引，转移到ht[1]上</li>
+<li>释放ht[0], 将ht[1]设置为hr[0]，并为ht[1]新创建一个空白哈希表，为下一次rehash做准备</li>
+</ol>
+<p>正常情况下，扩容复杂因子为1，收缩复杂因子为5。（还有非正常情况）</p>
+<p>在将ht[0]上的值rehash到ht[1]上时，采用渐进式rehash，策略是：</p>
+<ol>
+<li>字典中维护rehashindx，默认－1</li>
+<li>每次对字典的增删改查操作之后，都会执行一次rehash,把rehashindx对应索引的键值对，重新hash到ht[1]上，直到全部结束</li>
+<li>好处是，避免了集中式的rehash而带来的巨大计算量，而是分多次，渐进式的完成操作。</li>
+</ol>
+<p>需要注意的是，在此期间：</p>
+<ol>
+<li>查找操作，会ht[0], ht[1]都查，优先查ht[0]，如果找不到，才会查ht[1]</li>
+<li>添加操作，只会添加到ht[1]</li>
+<li>删除和修改操作则是两个哈希表都会执行</li>
+</ol>
+<p>这样做保证了ht[0]只会越来越少，直至变成空表。</p>
+<h2 id="跳跃表"><a href="#跳跃表" class="headerlink" title="跳跃表"></a>跳跃表</h2><p>跳跃表是一种有序数据结构，平均O(logN),最坏O(N)复杂度的节点查找。</p>
+<p>跳跃表节点结构如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">typedef struct zskiplistNode &#123;</span><br><span class="line">    //后退指针</span><br><span class="line">    struct zskiplistNode *backward;</span><br><span class="line">    </span><br><span class="line">    //分值</span><br><span class="line">    double *score;</span><br><span class="line">    </span><br><span class="line">    //成员对象</span><br><span class="line">    robj *obj;</span><br><span class="line">    </span><br><span class="line">    //层</span><br><span class="line">    struct zskiplistLevel&#123;</span><br><span class="line">        //前进指针</span><br><span class="line">        struct zskiplistNode; *forward</span><br><span class="line">        </span><br><span class="line">        //跨度</span><br><span class="line">        unsigned int span;</span><br><span class="line">    &#125; level[];</span><br><span class="line">    </span><br><span class="line">&#125; zskiplistNode</span><br></pre></td></tr></table></figure>
+<ol>
+<li>层。每次新创建一个新跳跃表节点的时候，会随机声称一个介于1到32之间的值作为level数组的大小</li>
+<li>前进指针。用于从表头向表尾方向访问节点</li>
+<li>跨度。用于记录两个跳跃表节点之前的跨度值（是否能一步到位）</li>
+<li>后退指针。从表尾向表头方向访问</li>
+<li>分值。跳跃表中所有节点都按照分值从小到大排序</li>
+<li>成员对象。一个sds字符串对象</li>
+</ol>
+<p>跳跃表结构如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">typedef struct zskiplist &#123;</span><br><span class="line">    //表头节点和表尾节点</span><br><span class="line">    structz skiplistNode *header, *tail;</span><br><span class="line">    </span><br><span class="line">    //表中节点的数量</span><br><span class="line">    unsigned long length;</span><br><span class="line">    </span><br><span class="line">    //表中节点层数最大的节点的层数</span><br><span class="line">    int level;</span><br><span class="line">    </span><br><span class="line">&#125; zkiplist;</span><br></pre></td></tr></table></figure>
+<h2 id="整数集合"><a href="#整数集合" class="headerlink" title="整数集合"></a>整数集合</h2><p>如果当一个集合只包含整数值元素，并且整个集合数量不多时，redis会使用整数集合来作为集合键的底层实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">typedef struct intset &#123;</span><br><span class="line">    //编码方式</span><br><span class="line">    uint32_t encoding;</span><br><span class="line">    </span><br><span class="line">    //集合包含的元素数量</span><br><span class="line">    uint32_t length;</span><br><span class="line">    </span><br><span class="line">    //保存元素的数组，从小到大有序存储</span><br><span class="line">    int8_t contents[];</span><br><span class="line">    </span><br><span class="line">&#125; intset;</span><br></pre></td></tr></table></figure>
+<p>contents虽然声明了是int8_t,但实际真正的取值取决于encoding</p>
+<p>当新增一个新元素时，如果该元素类型比整数集合现有所有元素类型都长，则需先进行升级操作，然后再添加</p>
+<ol>
+<li>根据新元素类型，扩展整数集合底层数组的空间大小，并为新元素分配空间</li>
+<li>将底层数组所有的元素转化成与新元素相同的类型，并将类型转化后的元素放置到正确的位上，而且再放置元素的过程中，需要继续维持底层数组的有序性质不变</li>
+<li>将新元素添加到底层数组里</li>
+</ol>
+<p>由于以上原因，向整数集合添加新元素的时间复杂度为O(N)</p>
+<p>注意，一旦升级，编码就会一直保持升级后的状态，整数集合不支持降级。</p>
+<h2 id="压缩列表"><a href="#压缩列表" class="headerlink" title="压缩列表"></a>压缩列表</h2><p>压缩列表是列表键和哈希键的底层实现之一。</p>
+<p>当一个列表键或者哈希键，值包含少量列表项，且要么为小整数，要么为长度较短的字符串，则redis会采用压缩列表作为其底层实现方式。</p>
+<p>为什么压缩节点能够节省内存呢？</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/uploads/wechat-qcode.png" alt="Daryl WeChat Pay">
+          <p>微信打赏</p>
+        </div>
+      
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Redis/" rel="tag"># Redis</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/archives/ada59da0.html" rel="next" title="Thrift对象的序列化与反序列化">
+                <i class="fa fa-chevron-left"></i> Thrift对象的序列化与反序列化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/archives/b8c743ed.html" rel="prev" title="Redis设计与实现-对象系统">
+                Redis设计与实现-对象系统 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 评论区广告 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1219606132354870" data-ad-slot="4156785282" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="Daryl">
+          <p class="site-author-name" itemprop="name">Daryl</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/darylliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://jacksmiththu.github.io" title="JackSmith" target="_blank">JackSmith</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#正文"><span class="nav-number">1.</span> <span class="nav-text">正文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SDS简单动态字符串"><span class="nav-number">2.</span> <span class="nav-text">SDS简单动态字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链表"><span class="nav-number">3.</span> <span class="nav-text">链表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字典"><span class="nav-number">4.</span> <span class="nav-text">字典</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跳跃表"><span class="nav-number">5.</span> <span class="nav-text">跳跃表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#整数集合"><span class="nav-number">6.</span> <span class="nav-text">整数集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#压缩列表"><span class="nav-number">7.</span> <span class="nav-text">压缩列表</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <!-- 侧边栏广告 -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1219606132354870" data-ad-slot="1362622054" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Daryl</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+<div class="BbeiAn-info"">
+  京ICP备 -
+  <a href="http://www.beian.miit.gov.cn">19031408号-1</a>
+  
+</div>
+
+
+        <!-- 
+ -->
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://lnplayer.disqus.com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.darylliu.cn/archives/b9be789b.html';
+          this.page.identifier = 'archives/b9be789b.html';
+          this.page.title = 'Redis设计与实现-底层数据结构';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://lnplayer.disqus.com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("qex6MVWdS81UYVJj5P5s3acC-gzGzoHsz", "AqlXEbwQfiMSKTV7jsX1HIyQ");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
